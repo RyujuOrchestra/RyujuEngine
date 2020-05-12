@@ -1,0 +1,16 @@
+{
+	"name": "com.ryujuorchestra.ryujuengine",
+	"displayName": "RyujuEngine",
+	"description": "Script Utilities for Ryuju Orchestra Applications.",
+	"version": "0.1.0-preview",
+	"unity": "2019.3",
+	"dependencies":{
+		"com.unity.test-framework": "1.1.13"
+	},
+	"keywords": [
+		"utilities"
+	],
+	"author": {
+		"name": "RyujuOrchestra"
+	}
+}
