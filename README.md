@@ -1,6 +1,15 @@
 # RyujuEngine for Unity
 This repository contains the scripts for Ryuju Orchestra Unity Applications.
 
+## Usage
+Add from Unity Package Manager Window.
+
+or add following line into manifest.json
+
+```
+"com.ryujuorchestra.ryujuengine": "https://github.com/RyujuOrchestra/RyujuEngine.git#v0.1.0-preview"
+```
+
 ## License
 Licensed under either of
 
