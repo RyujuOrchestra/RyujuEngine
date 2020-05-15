@@ -4,15 +4,23 @@ using System.Runtime.CompilerServices;
 namespace RyujuEngine.Mathematics
 {
 	/// <summary>
+	/// A static class that contains non-standard mathematics functions.
 	/// 標準的なクラスに無い数学的な関数をまとめた静的クラスです。
 	/// </summary>
 	public static class MathEx
 	{
 		/// <summary>
+		/// Find the greatest common divisor (GCD).
 		/// 最大公約数を求めます。
 		/// </summary>
-		/// <param name="a">対象となる値の 1 つ目です。</param>
-		/// <param name="b">対象となる値の 2 つ目です。</param>
+		/// <param name="a">
+		/// First target value.
+		/// 対象となる値の 1 つ目です。
+		/// </param>
+		/// <param name="b">
+		/// Second target value.
+		/// 対象となる値の 2 つ目です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int GCD(int a, int b)
 		{
@@ -45,10 +53,17 @@ namespace RyujuEngine.Mathematics
 		}
 
 		/// <summary>
+		/// Find the greatest common divisor (GCD).
 		/// 最大公約数を求めます。
 		/// </summary>
-		/// <param name="a">対象となる値の 1 つ目です。</param>
-		/// <param name="b">対象となる値の 2 つ目です。</param>
+		/// <param name="a">
+		/// First target value.
+		/// 対象となる値の 1 つ目です。
+		/// </param>
+		/// <param name="b">
+		/// Second target value.
+		/// 対象となる値の 2 つ目です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static long GCD(long a, long b)
 		{

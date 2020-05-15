@@ -7,6 +7,7 @@ using RyujuEngine.Mathematics;
 namespace RyujuEngine.Units
 {
 	/// <summary>
+	/// A struct that contains a position on a beat.
 	/// あるタイミングの時刻を拍数で表す構造体です。
 	/// </summary>
 	public readonly struct BeatPoint
@@ -15,16 +16,19 @@ namespace RyujuEngine.Units
 	, IEquatable<BeatPoint>
 	{
 		/// <summary>
+		/// An instance that indicates the origin position on a beat.
 		/// 原点となる時刻です。
 		/// </summary>
 		public static readonly BeatPoint Zero = new BeatPoint(0, Rational.Zero);
 
 		/// <summary>
+		/// A minimum value.
 		/// 扱える最小の時刻です。
 		/// </summary>
 		public static readonly BeatPoint Min = new BeatPoint(int.MinValue, Rational.Zero);
 
 		/// <summary>
+		/// A maximum value.
 		/// 扱える最大の時刻です。
 		/// </summary>
 		public static readonly BeatPoint Max = new BeatPoint(int.MaxValue, Rational.Zero);
@@ -41,8 +45,12 @@ namespace RyujuEngine.Units
 		/// <summary>
 		/// 原点からの拍数と小数点を組み合わせて BeatPoint を生成します。
 		/// </summary>
-		/// <param name="beat">拍数です。</param>
-		/// <param name="subBeat">追加の分数可の拍数です。</param>
+		/// <param name="beat">
+		/// 拍数です。
+		/// </param>
+		/// <param name="subBeat">
+		/// 追加の分数可の拍数です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public BeatPoint(int beat, in Rational subBeat)
 			=> DurationFromZero = new BeatDuration(beat, subBeat);
@@ -50,23 +58,28 @@ namespace RyujuEngine.Units
 		/// <summary>
 		/// 原点からの拍数から BeatPoint を生成します。
 		/// </summary>
-		/// <param name="durationFromZero">原点からの拍数です。</param>
+		/// <param name="durationFromZero">
+		/// 原点からの拍数です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public BeatPoint(in BeatDuration durationFromZero)
 			=> DurationFromZero = durationFromZero;
 
 		/// <summary>
+		/// A duration from the origin.
 		/// 原点からの経過時間です。
 		/// </summary>
 		public readonly BeatDuration DurationFromZero;
 
 		/// <summary>
+		/// A hash value.
 		/// ハッシュ値を求めます。
 		/// </summary>
 		public override int GetHashCode() => DurationFromZero.GetHashCode();
 
 #if UNITY_EDITOR
 		/// <summary>
+		/// A string for debugging.
 		/// デバッグ用の文字列表現を返します。
 		/// </summary>
 		public override string ToString() => DurationFromZero.ToString();
@@ -95,6 +108,7 @@ namespace RyujuEngine.Units
 		#region Equal and not equal.
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -109,6 +123,7 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -123,18 +138,21 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(BeatPoint x) => this == x;
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(in BeatPoint x) => this == x;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,6 +162,7 @@ namespace RyujuEngine.Units
 			   1;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 namespace RyujuEngine.Mathematics
 {
 	/// <summary>
+	/// A struct that contains a rational number.
 	/// 有理数を保持する構造体です。
 	/// </summary>
 	public struct Rational
@@ -17,20 +18,29 @@ namespace RyujuEngine.Mathematics
 	, IEquatable<int>
 	{
 		/// <summary>
+		/// An instance that indicates 0.
 		/// 0 を表す値です。
 		/// </summary>
 		public static readonly Rational Zero = new Rational(0, 1);
 
 		/// <summary>
+		/// An instance that indicates 1.
 		/// 1 を表す値です。
 		/// </summary>
 		public static readonly Rational One = new Rational(1, 1);
 
 		/// <summary>
+		/// Create a new rational number.
 		/// 有理数を生成します。
 		/// </summary>
-		/// <param name="numerator">分子です。</param>
-		/// <param name="denominator">分母です。</param>
+		/// <param name="numerator">
+		/// A numerator.
+		/// 分子です。
+		/// </param>
+		/// <param name="denominator">
+		/// A denominator.
+		/// 分母です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public Rational(long numerator, int denominator)
 		{
@@ -47,37 +57,44 @@ namespace RyujuEngine.Mathematics
 		}
 
 		/// <summary>
+		/// A numerator.
 		/// 分子です。
 		/// </summary>
 		public readonly long Numerator;
 
 		/// <summary>
+		/// A denominator.
 		/// 分母です。
 		/// </summary>
 		public readonly int Denominator;
 
 		/// <summary>
+		/// The value in float type.
 		/// float 型で表された値です。
 		/// </summary>
 		public float Float => Numerator / (float)Denominator;
 
 		/// <summary>
+		/// The value in double type.
 		/// double 型で表された値です。
 		/// </summary>
 		/// <returns></returns>
 		public double Double => Numerator / (double)Denominator;
 
 		/// <summary>
+		/// An integer part of this value.
 		/// 有理数の整数部分です。
 		/// </summary>
 		public long IntegerPart => Numerator / Denominator;
 
 		/// <summary>
+		/// A fraction part of this value.
 		/// 有理数の分数部分です。
 		/// </summary>
 		public Rational FractionPart => new Rational(Numerator - IntegerPart * Denominator, Denominator);
 
 		/// <summary>
+		/// A value that indicates {1 / plain_value}.
 		/// 逆数です。
 		/// </summary>
 		public Rational Reciprocal
@@ -90,6 +107,7 @@ namespace RyujuEngine.Mathematics
 		}
 
 		/// <summary>
+		/// A hash value.
 		/// ハッシュ値を求めます。
 		/// </summary>
 		public override int GetHashCode()
@@ -98,6 +116,7 @@ namespace RyujuEngine.Mathematics
 
 #if UNITY_EDITOR
 		/// <summary>
+		/// A string for debugging.
 		/// デバッグ用の文字列表現を返します。
 		/// </summary>
 		/// <returns></returns>
@@ -181,6 +200,7 @@ namespace RyujuEngine.Mathematics
 		#region Equal and not equal.
 
 		/// <summary>
+		/// Detect the same value.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		public override bool Equals(object obj)
@@ -205,6 +225,7 @@ namespace RyujuEngine.Mathematics
 		}
 
 		/// <summary>
+		/// Detect the same value.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		public int CompareTo(object obj)
@@ -229,21 +250,25 @@ namespace RyujuEngine.Mathematics
 		}
 
 		/// <summary>
+		/// Detect the same value.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		public bool Equals(Rational x) => this == x;
 
 		/// <summary>
+		/// Detect the same value.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		public bool Equals(in Rational x) => this == x;
 
 		/// <summary>
+		/// Detect the same value.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		public bool Equals(int x) => this == x;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		public int CompareTo(Rational x)
@@ -252,6 +277,7 @@ namespace RyujuEngine.Mathematics
 			   1;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		public int CompareTo(in Rational x)
@@ -260,6 +286,7 @@ namespace RyujuEngine.Mathematics
 			   1;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		public int CompareTo(int x)
