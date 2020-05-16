@@ -211,6 +211,22 @@ namespace RyujuEngine.Mathematics
 		public static Rational operator /(int y, in Rational x)
 			=> Mul(x.Denominator, x.Numerator, y, 1);
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float operator /(in Rational x, float y)
+			=> x.Denominator * y / x.Numerator;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float operator /(float y, in Rational x)
+			=> x.Denominator * y / x.Numerator;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static double operator /(in Rational x, double y)
+			=> x.Denominator * y / x.Numerator;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static double operator /(double y, in Rational x)
+			=> x.Denominator * y / x.Numerator;
+
 		#endregion
 
 		#region Equal and not equal.
