@@ -40,7 +40,7 @@ Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall be
 dual licensed as above, without any additional terms or conditions.
 
->特に明記がない限り、あなたの成果物の意図的な提出による任意のコントリビューションは、
+>特に明記がない限り、あなたの成果物の意図的な提出による任意のコントリビューションは、
 >Apache License, Version 2.0 に定めるところにより、
 >追加の条項や条件なしに上記 2 つのライセンス (訳注: Apache License, Version 2.0 及び MIT License)
 >によってデュアルライセンスのもとに頒布されるでしょう。
