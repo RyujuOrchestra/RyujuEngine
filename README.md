@@ -22,9 +22,9 @@ See [RyujuEngine.md](Documentation~/RyujuEngine) for more usage.
 Licensed under either of
 
 - Apache License, Version 2.0
-  ([LICENSE-APACHE](LICENSE#mit-license) or http://www.apache.org/licenses/LICENSE-2.0)
+  ([LICENSE.md#apache](LICENSE.md#apache-license-version-20) or http://www.apache.org/licenses/LICENSE-2.0)
 - MIT License
-  ([LICENSE-MIT](LICENSE#apache-license-version-20) or http://opensource.org/licenses/MIT)
+  ([LICENSE.md#mit](LICENSE.md#mit-license) or http://opensource.org/licenses/MIT)
 
 at your option.
 
