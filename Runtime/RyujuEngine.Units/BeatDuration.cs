@@ -28,37 +28,81 @@ namespace RyujuEngine.Units
 		public static readonly BeatDuration One = new BeatDuration(1, Rational.Zero);
 
 		/// <summary>
+		/// A minimum value.
+		/// <see cref="BeatDuration"/>の最小拍数です。
+		/// </summary>
+		public static readonly BeatDuration Min = new BeatDuration(int.MinValue, Rational.Zero);
+
+		/// <summary>
 		/// A maximum value.
 		/// <see cref="BeatDuration"/>の最大拍数です。
 		/// </summary>
 		public static readonly BeatDuration Max = new BeatDuration(int.MaxValue, Rational.Zero);
 
 		/// <summary>
-		/// 浮動小数点で表された拍数を、指定した解像度で BeatDuration に変換します。
+		/// Create an instance from floated beats using rationalization.
+		/// 浮動小数点で表された拍数から、指定した解像度でインスタンスを生成します。
 		/// </summary>
-		/// <param name="beat">小数点以下も含む拍数です。</param>
-		/// <param name="resolution">1 拍あたりの分割解像度です。</param>
+		/// <param name="beats">
+		/// A floated beats.
+		/// 小数点以下も含む拍数です。
+		/// </param>
+		/// <param name="resolution">
+		/// A resolution in a beat.
+		/// 1 拍あたりの分割解像度です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public BeatDuration(double beat, uint resolution)
-		{
-			var b = (int)beat;
-			var delta = beat - b;
-			var s = new Rational((long)(delta * resolution + (delta >= 0 ? 0.5 : -0.5)), (int)resolution);
-			Normalize(b, s, out Beat, out SubBeat);
-		}
+		public static BeatDuration Rationalize(BeatDurationFloat beats, uint resolution)
+			=> new BeatDuration(beats, resolution);
 
 		/// <summary>
-		/// 拍数と小数点を組み合わせて BeatDuration を生成します。
+		/// Create an instance from the beats and sub-beats.
+		/// 原点からの拍数と分数を組み合わせてインスタンスを生成します。
 		/// </summary>
-		/// <param name="beat">
+		/// <param name="beats">
+		/// The beats.
+		/// 拍数です。
+		/// </param>
+		/// <param name="subBeatPosition">
+		/// An additional beats from the `beats` parameter.
+		/// 分数で表された追加の拍数です。
+		/// </param>
+		/// <param name="subBeatResolution">
+		/// An resolution of the sub-beats.
+		/// sub-beat の解像度です。
+		/// </param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static BeatDuration From(int beats, long subBeatPosition, int subBeatResolution)
+			=> new BeatDuration(beats, new Rational(subBeatPosition, subBeatResolution));
+
+		/// <summary>
+		/// Create an instance from the beats and sub-beats.
+		/// 原点からの拍数と分数を組み合わせてインスタンスを生成します。
+		/// </summary>
+		/// <param name="beats">
+		/// The beats.
 		/// 拍数です。
 		/// </param>
 		/// <param name="subBeat">
-		/// 追加の分数可の拍数です。
+		/// An additional beats from the `beats` parameter.
+		/// 分数で表された追加の拍数です。
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public BeatDuration(int beat, in Rational subBeat)
-			=> Normalize(beat, subBeat, out Beat, out SubBeat);
+		public static BeatDuration From(int beats, in Rational subBeats)
+			=> new BeatDuration(beats, subBeats);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private BeatDuration(BeatDurationFloat duration, uint resolution)
+		{
+			var b = (int)duration.Beats;
+			var delta = duration.Beats - b;
+			var s = new Rational((long)(delta * resolution + (delta >= 0 ? 0.5 : -0.5)), (int)resolution);
+			Normalize(b, s, out BeatPart, out SubBeatPart);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private BeatDuration(int beats, in Rational subBeats)
+			=> Normalize(beats, subBeats, out BeatPart, out SubBeatPart);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static void Normalize(int b, Rational s, out int beat, out Rational subBeat)
@@ -83,25 +127,25 @@ namespace RyujuEngine.Units
 		/// The integer part of the beats.
 		/// 拍数の整数部です。
 		/// </summary>
-		public readonly int Beat;
+		public readonly int BeatPart;
 
 		/// <summary>
 		/// The fraction part of the beats.
 		/// 拍数の小数部です。
 		/// </summary>
-		public readonly Rational SubBeat;
+		public readonly Rational SubBeatPart;
 
 		/// <summary>
 		/// The value in float type.
 		/// float 型で表された値です。
 		/// </summary>
-		public double Float => Beat + SubBeat.Float;
+		public double Float => BeatPart + SubBeatPart.Float;
 
 		/// <summary>
 		/// The value in double type.
 		/// double 型で表された値です。
 		/// </summary>
-		public double Double => Beat + SubBeat.Double;
+		public double Double => BeatPart + SubBeatPart.Double;
 
 #if UNITY_EDITOR
 		/// <summary>
@@ -109,7 +153,7 @@ namespace RyujuEngine.Units
 		/// デバッグ用の文字列表現を返します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override string ToString() => $"{Beat}+({SubBeat})";
+		public override string ToString() => $"{BeatPart}+({SubBeatPart})";
 #endif
 
 		#region Basic arithmetic operations.
@@ -119,19 +163,19 @@ namespace RyujuEngine.Units
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatDuration operator -(in BeatDuration x)
-			=> new BeatDuration(-x.Beat, -x.SubBeat);
+			=> new BeatDuration(-x.BeatPart, -x.SubBeatPart);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatDuration operator +(in BeatDuration x, in BeatDuration y)
-			=> new BeatDuration(x.Beat + y.Beat, x.SubBeat + y.SubBeat);
+			=> new BeatDuration(x.BeatPart + y.BeatPart, x.SubBeatPart + y.SubBeatPart);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatDuration operator -(in BeatDuration x, in BeatDuration y)
-			=> new BeatDuration(x.Beat - y.Beat, x.SubBeat - y.SubBeat);
+			=> new BeatDuration(x.BeatPart - y.BeatPart, x.SubBeatPart - y.SubBeatPart);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatDuration operator *(in BeatDuration x, int y)
-			=> new BeatDuration(x.Beat * y, x.SubBeat * y);
+			=> new BeatDuration(x.BeatPart * y, x.SubBeatPart * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatDuration operator *(int y, in BeatDuration x)
@@ -140,8 +184,8 @@ namespace RyujuEngine.Units
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatDuration operator *(in BeatDuration x, in Rational y)
 		{
-			var b = x.Beat * y;
-			var s = x.SubBeat * y;
+			var b = x.BeatPart * y;
+			var s = x.SubBeatPart * y;
 			return new BeatDuration((int)(b.IntegerPart + s.IntegerPart), b.FractionPart + s.FractionPart);
 		}
 
@@ -166,7 +210,7 @@ namespace RyujuEngine.Units
 		/// ハッシュ値を求めます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public override int GetHashCode() => (int)((uint)Beat * 0x2ac60f42) ^ SubBeat.GetHashCode();
+		public override int GetHashCode() => (int)((uint)BeatPart * 0x2ac60f42) ^ SubBeatPart.GetHashCode();
 
 		/// <summary>
 		/// Detect the same values.
@@ -234,11 +278,11 @@ namespace RyujuEngine.Units
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(in BeatDuration x, in BeatDuration y)
-			=> x.Beat == y.Beat && x.SubBeat == y.SubBeat;
+			=> x.BeatPart == y.BeatPart && x.SubBeatPart == y.SubBeatPart;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator !=(in BeatDuration x, in BeatDuration y)
-			=> x.SubBeat != y.SubBeat || x.Beat != y.Beat;
+			=> x.SubBeatPart != y.SubBeatPart || x.BeatPart != y.BeatPart;
 
 		#endregion
 
@@ -258,7 +302,7 @@ namespace RyujuEngine.Units
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private static bool Less(in BeatDuration x, in BeatDuration y)
-			=> x.Beat < y.Beat || x.Beat == y.Beat && x.SubBeat < y.SubBeat;
+			=> x.BeatPart < y.BeatPart || x.BeatPart == y.BeatPart && x.SubBeatPart < y.SubBeatPart;
 
 		#endregion
 	}

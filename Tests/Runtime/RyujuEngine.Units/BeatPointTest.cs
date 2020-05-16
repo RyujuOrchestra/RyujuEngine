@@ -1,8 +1,6 @@
 // Copyright (c) 2020 Ryuju Orchestra
 using NUnit.Framework;
 
-using RyujuEngine.Mathematics;
-
 using RyujuEngine.Units;
 
 namespace Units
@@ -46,9 +44,9 @@ namespace Units
 		[TestCase(0, 5, -3)]
 		public void It_should_be_able_to_create_with_the_specified_values(int beat, long subBeatPos, int subBeatRes)
 		{
-			var durationFromZero = new BeatDuration(beat, new Rational(subBeatPos, subBeatRes));
+			var durationFromZero = BeatDuration.From(beat, subBeatPos, subBeatRes);
 
-			var actual = new BeatPoint(beat, new Rational(subBeatPos, subBeatRes));
+			var actual = BeatPoint.At(beat, subBeatPos, subBeatRes);
 			Assert.That(actual.DurationFromZero, Is.EqualTo(durationFromZero), "This instance has an invalid value.");
 		}
 
@@ -63,11 +61,11 @@ namespace Units
 			int ySubRes
 		)
 		{
-			var x = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes));
-			var y = new BeatDuration(yBeat, new Rational(ySubPos, ySubRes));
+			var x = BeatDuration.From(xBeat, xSubPos, xSubRes);
+			var y = BeatDuration.From(yBeat, ySubPos, ySubRes);
 
 			var expected = x + y;
-			var actual = new BeatPoint(x) + y;
+			var actual = BeatPoint.FromZeroTo(x) + y;
 			Assert.That(actual.DurationFromZero, Is.EqualTo(expected), "The instance has an invalid beat value.");
 		}
 
@@ -82,11 +80,11 @@ namespace Units
 			int ySubRes
 		)
 		{
-			var x = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes));
-			var y = new BeatDuration(yBeat, new Rational(ySubPos, ySubRes));
+			var x = BeatDuration.From(xBeat, xSubPos, xSubRes);
+			var y = BeatDuration.From(yBeat, ySubPos, ySubRes);
 
 			var expected = y + x;
-			var actual = y + new BeatPoint(x);
+			var actual = y + BeatPoint.FromZeroTo(x);
 			Assert.That(actual.DurationFromZero, Is.EqualTo(expected), "The instance has an invalid beat value.");
 		}
 
@@ -101,11 +99,11 @@ namespace Units
 			int ySubRes
 		)
 		{
-			var x = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes));
-			var y = new BeatDuration(yBeat, new Rational(ySubPos, ySubRes));
+			var x = BeatDuration.From(xBeat, xSubPos, xSubRes);
+			var y = BeatDuration.From(yBeat, ySubPos, ySubRes);
 
 			var expected = x - y;
-			var actual = new BeatPoint(x) - y;
+			var actual = BeatPoint.FromZeroTo(x) - y;
 			Assert.That(actual.DurationFromZero, Is.EqualTo(expected), "The instance has an invalid beat value.");
 		}
 	}

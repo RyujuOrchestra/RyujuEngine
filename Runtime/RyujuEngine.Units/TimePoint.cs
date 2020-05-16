@@ -25,30 +25,46 @@ namespace RyujuEngine.Units
 		/// An instance that indicates the position infinite position.
 		/// 正の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
 		public static readonly TimePoint PositiveInfinity = new TimePoint(TimeDuration.PositiveInfinity);
 
 		/// <summary>
 		/// An instance that indicates the negative infinite position.
 		/// 負の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
 		public static readonly TimePoint NegativeInfinity = new TimePoint(TimeDuration.NegativeInfinity);
 
 		/// <summary>
 		/// Create an instance with the specified seconds.
 		/// 指定した秒数のインスタンスを生成します。
 		/// </summary>
+		/// <param name="seconds">
+		/// A time from the origin in a second.
+		/// 秒数で表された原点からの時間です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static TimePoint AtSeconds(double seconds) => new TimePoint(TimeDuration.OfSeconds(seconds));
 
 		/// <summary>
 		/// Create an instance with the specified duration from the origin.
-		/// 原点からの秒数から TimePoint を生成します。
+		/// 原点からの秒数からインスタンスを生成します。
 		/// </summary>
-		/// <param name="durationFromZero">原点からの秒数です。</param>
+		/// <param name="durationFromZero">
+		/// A time from the origin.
+		/// 原点からの時間です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public TimePoint(in TimeDuration durationFromZero)
+		public static TimePoint FromZeroTo(in TimeDuration durationFromZero) => new TimePoint(durationFromZero);
+
+		/// <summary>
+		/// Create an instance with the specified duration from the origin.
+		/// 原点からの秒数からインスタンスを生成します。
+		/// </summary>
+		/// <param name="durationFromZero">
+		/// A duration from zero.
+		/// 原点からの時間です。
+		/// </param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private TimePoint(in TimeDuration durationFromZero)
 			=> DurationFromZero = durationFromZero;
 
 		/// <summary>
