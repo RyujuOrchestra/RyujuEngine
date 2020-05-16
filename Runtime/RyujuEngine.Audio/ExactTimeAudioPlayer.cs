@@ -144,7 +144,7 @@ namespace RyujuEngine.Audio
 				var time = Time;
 				if (time.DurationFromZero >= Duration)
 				{
-					return new TimePoint(Duration);
+					return TimePoint.FromZeroTo(Duration);
 				}
 				if (time <= _offset)
 				{

@@ -88,7 +88,7 @@ namespace RyujuEngine.Collections
 			{
 				durationFromZero += duration;
 			}
-			return new TimePoint(durationFromZero);
+			return TimePoint.FromZeroTo(durationFromZero);
 		}
 
 		/// <summary>

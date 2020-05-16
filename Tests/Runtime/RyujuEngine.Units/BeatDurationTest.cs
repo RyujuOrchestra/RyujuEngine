@@ -72,16 +72,16 @@ namespace Units
 		public void It_should_be_able_to_get_zero()
 		{
 			var actual = BeatDuration.Zero;
-			Assert.That(actual.Beat, Is.EqualTo(0), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(Rational.Zero), "The instance has an invalid sub-beat value.");
+			Assert.That(actual.BeatPart, Is.EqualTo(0), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(Rational.Zero), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
 		public void It_should_be_able_to_get_one()
 		{
 			var actual = BeatDuration.One;
-			Assert.That(actual.Beat, Is.EqualTo(1), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(Rational.Zero), "The instance has an invalid sub-beat value.");
+			Assert.That(actual.BeatPart, Is.EqualTo(1), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(Rational.Zero), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -91,9 +91,9 @@ namespace Units
 		public void It_should_be_able_to_create_with_the_specified_values(int beat, long subBeatPos, int subBeatRes)
 		{
 			var subBeat = new Rational(subBeatPos, subBeatRes);
-			var actual = new BeatDuration(beat, subBeat);
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = BeatDuration.From(beat, subBeatPos, subBeatRes);
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -113,9 +113,9 @@ namespace Units
 		{
 			var expectedSubBeat = new Rational(expectedSubBeatPos, expectedSubBeatRes);
 
-			var actual = new BeatDuration(beat, new Rational(subBeatPos, subBeatRes));
-			Assert.That(actual.Beat, Is.EqualTo(expectedBeat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(expectedSubBeat), "The instance has an invalid sub-beat value.");
+			var actual = BeatDuration.From(beat, subBeatPos, subBeatRes);
+			Assert.That(actual.BeatPart, Is.EqualTo(expectedBeat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(expectedSubBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -134,10 +134,11 @@ namespace Units
 			Evaluate(x + y, out var beat, out var subBeat);
 
 			var actual
-				= new BeatDuration(xBeat, new Rational(xSubPos, xSubRes))
-				+ new BeatDuration(yBeat, new Rational(ySubPos, ySubRes));
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+				= BeatDuration.From(xBeat, xSubPos, xSubRes)
+				+ BeatDuration.From(yBeat, ySubPos, ySubRes)
+				;
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -156,10 +157,11 @@ namespace Units
 			Evaluate(x - y, out var beat, out var subBeat);
 
 			var actual
-				= new BeatDuration(xBeat, new Rational(xSubPos, xSubRes))
-				- new BeatDuration(yBeat, new Rational(ySubPos, ySubRes));
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+				= BeatDuration.From(xBeat, xSubPos, xSubRes)
+				- BeatDuration.From(yBeat, ySubPos, ySubRes)
+				;
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -176,9 +178,9 @@ namespace Units
 			var y = new Rational(yNumerator, yDenominator);
 			Evaluate(x * y, out var beat, out var subBeat);
 
-			var actual = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes)) * y;
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = BeatDuration.From(xBeat, xSubPos, xSubRes) * y;
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -195,9 +197,9 @@ namespace Units
 			var y = new Rational(yNumerator, yDenominator);
 			Evaluate(x * y, out var beat, out var subBeat);
 
-			var actual = y * new BeatDuration(xBeat, new Rational(xSubPos, xSubRes));
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = y * BeatDuration.From(xBeat, xSubPos, xSubRes);
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -212,9 +214,9 @@ namespace Units
 			var x = xBeat + new Rational(xSubPos, xSubRes);
 			Evaluate(x * y, out var beat, out var subBeat);
 
-			var actual = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes)) * y;
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = BeatDuration.From(xBeat, xSubPos, xSubRes) * y;
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -229,9 +231,9 @@ namespace Units
 			var x = xBeat + new Rational(xSubPos, xSubRes);
 			Evaluate(x * y, out var beat, out var subBeat);
 
-			var actual = y * new BeatDuration(xBeat, new Rational(xSubPos, xSubRes));
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = y * BeatDuration.From(xBeat, xSubPos, xSubRes);
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -251,9 +253,9 @@ namespace Units
 			var x = xBeat + new Rational(xSubPos, xSubRes);
 			Evaluate(x / y, out var beat, out var subBeat);
 
-			var actual = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes)) / y;
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = BeatDuration.From(xBeat, xSubPos, xSubRes) / y;
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		[Test]
@@ -275,9 +277,9 @@ namespace Units
 			}
 			Evaluate(x / y, out var beat, out var subBeat);
 
-			var actual = new BeatDuration(xBeat, new Rational(xSubPos, xSubRes)) / y;
-			Assert.That(actual.Beat, Is.EqualTo(beat), "The instance has an invalid beat value.");
-			Assert.That(actual.SubBeat, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
+			var actual = BeatDuration.From(xBeat, new Rational(xSubPos, xSubRes)) / y;
+			Assert.That(actual.BeatPart, Is.EqualTo(beat), "The instance has an invalid beat value.");
+			Assert.That(actual.SubBeatPart, Is.EqualTo(subBeat), "The instance has an invalid sub-beat value.");
 		}
 
 		private static void Evaluate(in Rational expression, out int beat, out Rational subBeat)

@@ -48,6 +48,10 @@ namespace RyujuEngine.Units
 		/// </summary>
 		/// <param name="durationFromZero">原点からの拍数です。</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static BeatPointFloat FromZeroTo(in BeatDurationFloat durationFromZero)
+			=> new BeatPointFloat(durationFromZero);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public BeatPointFloat(in BeatDurationFloat durationFromZero)
 			=> DurationFromZero = durationFromZero;
 
