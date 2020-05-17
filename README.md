@@ -18,6 +18,30 @@ See [RyujuEngine.md](Documentation~/RyujuEngine) for more usage.
 
 >詳しい使用方法は[RyujuEngine.md](Documentation~/RyujuEngine)を参照してください。
 
+## Development
+For development, prepare the following items:
+>開発には次のものを準備します。
+
+- Unity Editor 2019.3
+- New empty project for development
+  (開発用の新しい空のプロジェクト)
+- Your new development repository that forked this repository
+  (このリポジトリを fork した開発リポジトリ)
+
+Open Unity Package Manager on the above project, enable `show preview package` on its `Advanced` button,
+and then install the following packages into the project:
+>上記のプロジェクトにて Unity Package Manager を開き、`show preview package` を `Advanced` ボタンから有効化し、
+>その上で次のパッケージをインストールしてください。
+
+- Package Development
+
+Finally, git-clone your forked repository on the `path/to/project/Packages` directory.
+Well done! This library is installed on `Packages/RyujuEngine` that is visible on the `Project` view.
+It is editable and testable.
+>最後に、fork したリポジトリを `このプロジェクトのパス/Packages` ディレクトリの中で git clone します。
+>すると、RyujuEngine ライブラリが`プロジェクト`ビューから見える `Packages/RyujuEngine` にインストールされます。
+>これは編集やテストが可能です。
+
 ## License
 Licensed under either of
 
