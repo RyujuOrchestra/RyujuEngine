@@ -75,13 +75,6 @@ namespace RyujuEngine.Mathematics
 		public float Float => Numerator / (float)Denominator;
 
 		/// <summary>
-		/// The value in double type.
-		/// double 型で表された値です。
-		/// </summary>
-		/// <returns></returns>
-		public double Double => Numerator / (double)Denominator;
-
-		/// <summary>
 		/// An integer part of this value.
 		/// 有理数の整数部分です。
 		/// </summary>
@@ -187,14 +180,6 @@ namespace RyujuEngine.Mathematics
 		public static float operator *(float y, in Rational x)
 			=> x.Numerator * y / x.Denominator;
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator *(in Rational x, double y)
-			=> x.Numerator * y / x.Denominator;
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator *(double y, in Rational x)
-			=> x.Numerator * y / x.Denominator;
-
 		#endregion
 
 		#region Div.
@@ -220,12 +205,6 @@ namespace RyujuEngine.Mathematics
 			=> x.Denominator * y / x.Numerator;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator /(in Rational x, double y)
-			=> x.Denominator * y / x.Numerator;
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator /(double y, in Rational x)
-			=> x.Denominator * y / x.Numerator;
 
 		#endregion
 

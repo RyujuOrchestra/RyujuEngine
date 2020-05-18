@@ -35,7 +35,6 @@ namespace Mathematics
 			Assert.That(actual.Numerator, Is.EqualTo(0), "The numerator must be 0.");
 			Assert.That(actual.Denominator, Is.EqualTo(1), "The denominator must be 1.");
 			Assert.That(actual.Float, Is.EqualTo(0.0f).Within(0.001f), "The float must be 0.");
-			Assert.That(actual.Double, Is.EqualTo(0.0).Within(0.001), "The double must be 0.");
 			Assert.That(actual.IntegerPart, Is.EqualTo(0), "The integer part must be 0.");
 			Assert.That(actual.FractionPart, Is.EqualTo(Rational.Zero), "The fraction part must be 0.");
 			Assert.That(() => actual.Reciprocal, Throws.Exception, "The reciprocal must not be defined.");
@@ -48,7 +47,6 @@ namespace Mathematics
 			Assert.That(actual.Numerator, Is.EqualTo(1), "The numerator must be 1.");
 			Assert.That(actual.Denominator, Is.EqualTo(1), "The denominator must be 1.");
 			Assert.That(actual.Float, Is.EqualTo(1.0f).Within(0.001f), "The float must be 1.");
-			Assert.That(actual.Double, Is.EqualTo(1.0).Within(0.001), "The double must be 1.");
 			Assert.That(actual.IntegerPart, Is.EqualTo(1), "The integer part must be 1.");
 			Assert.That(actual.FractionPart, Is.EqualTo(Rational.Zero), "The fraction part must be 0.");
 			Assert.That(actual.Reciprocal, Is.EqualTo(Rational.One), "The reciprocal must be 1.");
@@ -73,7 +71,6 @@ namespace Mathematics
 			Assert.That(actual.Numerator, Is.EqualTo(num), "Invalid numerator.");
 			Assert.That(actual.Denominator, Is.EqualTo(den), "Invalid denominator.");
 			Assert.That(actual.Float, Is.EqualTo((float)numerator / denominator).Within(0.001f), "Invalid float.");
-			Assert.That(actual.Double, Is.EqualTo((double)numerator / denominator).Within(0.001), "Invalid double.");
 			Assert.That(actual.IntegerPart, Is.EqualTo(integerPart), "Invalid integer part.");
 			Assert.That(actual.FractionPart, Is.EqualTo(fractionalPart), "Invalid fraction part.");
 			Assert.That(actual.Reciprocal, Is.EqualTo(reciprocal), "Invalid reciprocal number.");

@@ -44,7 +44,7 @@ namespace Units
 		[TestCase(0, 5, -3)]
 		public void It_should_be_able_to_create_with_the_specified_values(int beat, long subBeatPos, int subBeatRes)
 		{
-			var durationFromZero = BeatDuration.From(beat, subBeatPos, subBeatRes);
+			var durationFromZero = BeatDuration.Of(beat, subBeatPos, subBeatRes);
 
 			var actual = BeatPoint.At(beat, subBeatPos, subBeatRes);
 			Assert.That(actual.DurationFromZero, Is.EqualTo(durationFromZero), "This instance has an invalid value.");
@@ -61,11 +61,11 @@ namespace Units
 			int ySubRes
 		)
 		{
-			var x = BeatDuration.From(xBeat, xSubPos, xSubRes);
-			var y = BeatDuration.From(yBeat, ySubPos, ySubRes);
+			var x = BeatDuration.Of(xBeat, xSubPos, xSubRes);
+			var y = BeatDuration.Of(yBeat, ySubPos, ySubRes);
 
 			var expected = x + y;
-			var actual = BeatPoint.FromZeroTo(x) + y;
+			var actual = BeatPoint.At(x) + y;
 			Assert.That(actual.DurationFromZero, Is.EqualTo(expected), "The instance has an invalid beat value.");
 		}
 
@@ -80,11 +80,11 @@ namespace Units
 			int ySubRes
 		)
 		{
-			var x = BeatDuration.From(xBeat, xSubPos, xSubRes);
-			var y = BeatDuration.From(yBeat, ySubPos, ySubRes);
+			var x = BeatDuration.Of(xBeat, xSubPos, xSubRes);
+			var y = BeatDuration.Of(yBeat, ySubPos, ySubRes);
 
 			var expected = y + x;
-			var actual = y + BeatPoint.FromZeroTo(x);
+			var actual = y + BeatPoint.At(x);
 			Assert.That(actual.DurationFromZero, Is.EqualTo(expected), "The instance has an invalid beat value.");
 		}
 
@@ -99,11 +99,11 @@ namespace Units
 			int ySubRes
 		)
 		{
-			var x = BeatDuration.From(xBeat, xSubPos, xSubRes);
-			var y = BeatDuration.From(yBeat, ySubPos, ySubRes);
+			var x = BeatDuration.Of(xBeat, xSubPos, xSubRes);
+			var y = BeatDuration.Of(yBeat, ySubPos, ySubRes);
 
 			var expected = x - y;
-			var actual = BeatPoint.FromZeroTo(x) - y;
+			var actual = BeatPoint.At(x) - y;
 			Assert.That(actual.DurationFromZero, Is.EqualTo(expected), "The instance has an invalid beat value.");
 		}
 	}

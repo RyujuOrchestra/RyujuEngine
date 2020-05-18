@@ -19,7 +19,7 @@ namespace RyujuEngine.Audio
 		{
 			get;
 			private set;
-		} = TimeDuration.OfSeconds(0.0);
+		} = TimeDuration.OfSeconds(0.0f);
 
 		/// <summary>
 		/// A flag that indicates whether the audio latency is being minimized or not.
@@ -75,7 +75,7 @@ namespace RyujuEngine.Audio
 			else
 			{
 				var config = AudioSettings.GetConfiguration();
-				var newDuration = TimeDuration.OfSeconds((double)config.dspBufferSize / config.sampleRate);
+				var newDuration = TimeDuration.OfSeconds((float)config.dspBufferSize / config.sampleRate);
 				if (Duration <= TimeDuration.Zero || newDuration < Duration)
 				{
 					Duration = newDuration;

@@ -67,7 +67,7 @@ namespace RyujuEngine.Units
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static BeatPoint At(int beats, long subBeatPosition, int subBeatResolution)
-			=> new BeatPoint(BeatDuration.From(beats, subBeatPosition, subBeatResolution));
+			=> new BeatPoint(BeatDuration.Of(beats, subBeatPosition, subBeatResolution));
 
 		/// <summary>
 		/// Create an instance with the specified duration from the origin.
@@ -78,7 +78,7 @@ namespace RyujuEngine.Units
 		/// 原点からの時間です。
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatPoint FromZeroTo(in BeatDuration durationFromZero) => new BeatPoint(durationFromZero);
+		public static BeatPoint At(in BeatDuration durationFromZero) => new BeatPoint(durationFromZero);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private BeatPoint(in BeatDuration durationFromZero)

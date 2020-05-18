@@ -72,7 +72,7 @@ namespace RyujuEngine.Units
 		/// sub-beat の解像度です。
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDuration From(int beats, long subBeatPosition, int subBeatResolution)
+		public static BeatDuration Of(int beats, long subBeatPosition, int subBeatResolution)
 			=> new BeatDuration(beats, new Rational(subBeatPosition, subBeatResolution));
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace RyujuEngine.Units
 		/// 分数で表された追加の拍数です。
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDuration From(int beats, in Rational subBeats)
+		public static BeatDuration Of(int beats, in Rational subBeats)
 			=> new BeatDuration(beats, subBeats);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -134,18 +134,6 @@ namespace RyujuEngine.Units
 		/// 拍数の小数部です。
 		/// </summary>
 		public readonly Rational SubBeatPart;
-
-		/// <summary>
-		/// The value in float type.
-		/// float 型で表された値です。
-		/// </summary>
-		public double Float => BeatPart + SubBeatPart.Float;
-
-		/// <summary>
-		/// The value in double type.
-		/// double 型で表された値です。
-		/// </summary>
-		public double Double => BeatPart + SubBeatPart.Double;
 
 #if UNITY_EDITOR
 		/// <summary>

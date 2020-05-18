@@ -42,7 +42,7 @@ namespace RyujuEngine.Units
 		/// 秒数で表された原点からの時間です。
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimePoint AtSeconds(double seconds) => new TimePoint(TimeDuration.OfSeconds(seconds));
+		public static TimePoint AtSeconds(float seconds) => new TimePoint(TimeDuration.OfSeconds(seconds));
 
 		/// <summary>
 		/// Create an instance with the specified duration from the origin.
@@ -53,7 +53,7 @@ namespace RyujuEngine.Units
 		/// 原点からの時間です。
 		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimePoint FromZeroTo(in TimeDuration durationFromZero) => new TimePoint(durationFromZero);
+		public static TimePoint At(in TimeDuration durationFromZero) => new TimePoint(durationFromZero);
 
 		/// <summary>
 		/// Create an instance with the specified duration from the origin.

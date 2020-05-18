@@ -17,48 +17,48 @@ namespace RyujuEngine.Units
 		/// An instance that indicates zero distance.
 		/// 0 拍を表すインスタンスです。
 		/// </summary>
-		public static readonly BeatDurationFloat Zero = new BeatDurationFloat(0.0);
+		public static readonly BeatDurationFloat Zero = new BeatDurationFloat(0.0f);
 
 		/// <summary>
 		/// An instance that indicates 1 beats distance.
 		/// 1 拍を表すインスタンスです。
 		/// </summary>
-		public static readonly BeatDurationFloat One = new BeatDurationFloat(1.0);
+		public static readonly BeatDurationFloat One = new BeatDurationFloat(1.0f);
 
 		/// <summary>
 		/// An instance that indicates positive infinite distance.
 		/// 正の無限大を表すインスタンスです。
 		/// </summary>
-		public static readonly BeatDurationFloat PositiveInfinity = new BeatDurationFloat(double.PositiveInfinity);
+		public static readonly BeatDurationFloat PositiveInfinity = new BeatDurationFloat(float.PositiveInfinity);
 
 		/// <summary>
 		/// An instance that indicates negative infinite distance.
 		/// 負の無限大を表すインスタンスです。
 		/// </summary>
-		public static readonly BeatDurationFloat NegativeInfinity = new BeatDurationFloat(double.NegativeInfinity);
+		public static readonly BeatDurationFloat NegativeInfinity = new BeatDurationFloat(float.NegativeInfinity);
 
 		/// <summary>
 		/// Create an instance with the specified beats count.
 		/// 指定した拍数のインスタンスを生成します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat Of(double beats) => new BeatDurationFloat(beats);
+		public static BeatDurationFloat Of(float beats) => new BeatDurationFloat(beats);
 
 		/// <summary>
 		/// Create an instance.
 		/// 新しいインスタンスを生成します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private BeatDurationFloat(double beats) => Beats = beats;
+		private BeatDurationFloat(float beats) => Beats = beats;
 
 		/// <summary>
 		/// A duration in a beat.
 		/// 拍数で表された時間です。
 		/// </summary>
-		public readonly double Beats;
+		public readonly float Beats;
 
 		public static implicit operator BeatDurationFloat(in BeatDuration duration)
-			=> BeatDurationFloat.Of(duration.Double);
+			=> BeatDurationFloat.Of(duration.BeatPart + duration.SubBeatPart.Float);
 
 #if UNITY_EDITOR
 		/// <summary>
@@ -84,19 +84,19 @@ namespace RyujuEngine.Units
 			=> new BeatDurationFloat(x.Beats - y.Beats);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat operator *(in BeatDurationFloat x, double y)
+		public static BeatDurationFloat operator *(in BeatDurationFloat x, float y)
 			=> new BeatDurationFloat(x.Beats * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat operator *(double y, in BeatDurationFloat x)
+		public static BeatDurationFloat operator *(float y, in BeatDurationFloat x)
 			=> new BeatDurationFloat(x.Beats * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat operator /(in BeatDurationFloat x, double y)
+		public static BeatDurationFloat operator /(in BeatDurationFloat x, float y)
 			=> new BeatDurationFloat(x.Beats / y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator %(in BeatDurationFloat x, in BeatDurationFloat y)
+		public static float operator %(in BeatDurationFloat x, in BeatDurationFloat y)
 			=> x.Beats % y.Beats;
 
 		#endregion
