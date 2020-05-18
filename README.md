@@ -11,7 +11,7 @@ or add the following line into `Packages/manifest.json`
 >または、次の 1 行を `Packages/manifest.json` に追加してください。
 
 ```
-"com.ryujuorchestra.ryujuengine": "https://github.com/RyujuOrchestra/RyujuEngine.git#v0.1.0-preview"
+"com.ryujuorchestra.ryujuengine": "https://github.com/RyujuOrchestra/RyujuEngine.git#v0.2.0-preview"
 ```
 
 See [RyujuEngine.md](Documentation~/RyujuEngine) for more usage.
