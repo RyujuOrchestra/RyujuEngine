@@ -25,7 +25,7 @@ namespace Collections.Extension
 		};
 
 		[Test]
-		public void It_SHould_be_alble_to_work_with_empty()
+		public void It_Should_be_able_to_work_with_empty()
 		{
 			Assert.That(
 				new int[0].BinarySearchBounds(1, out var actualLower, out var actualUpper), Is.False,
