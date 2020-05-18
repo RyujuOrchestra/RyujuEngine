@@ -5,7 +5,8 @@ using System.Runtime.CompilerServices;
 namespace RyujuEngine.Units
 {
 	/// <summary>
-	/// 時間を秒数で表す構造体です。
+	/// A struct that contains a duration between two beats position.
+	/// 2 つのタイミングの間隔を拍数で表す構造体です。
 	/// </summary>
 	public readonly struct BeatDurationFloat
 	: IComparable
@@ -13,46 +14,51 @@ namespace RyujuEngine.Units
 	, IEquatable<BeatDurationFloat>
 	{
 		/// <summary>
+		/// An instance that indicates zero distance.
 		/// 0 拍を表すインスタンスです。
 		/// </summary>
-		public static readonly BeatDurationFloat Zero = new BeatDurationFloat(0.0);
+		public static readonly BeatDurationFloat Zero = new BeatDurationFloat(0.0f);
 
 		/// <summary>
+		/// An instance that indicates 1 beats distance.
 		/// 1 拍を表すインスタンスです。
 		/// </summary>
-		public static readonly BeatDurationFloat One = new BeatDurationFloat(1.0);
+		public static readonly BeatDurationFloat One = new BeatDurationFloat(1.0f);
 
 		/// <summary>
+		/// An instance that indicates positive infinite distance.
 		/// 正の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
-		public static readonly BeatDurationFloat PositiveInfinity = new BeatDurationFloat(double.PositiveInfinity);
+		public static readonly BeatDurationFloat PositiveInfinity = new BeatDurationFloat(float.PositiveInfinity);
 
 		/// <summary>
+		/// An instance that indicates negative infinite distance.
 		/// 負の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
-		public static readonly BeatDurationFloat NegativeInfinity = new BeatDurationFloat(double.NegativeInfinity);
+		public static readonly BeatDurationFloat NegativeInfinity = new BeatDurationFloat(float.NegativeInfinity);
 
 		/// <summary>
+		/// Create an instance with the specified beats count.
 		/// 指定した拍数のインスタンスを生成します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat Of(double beats) => new BeatDurationFloat(beats);
+		public static BeatDurationFloat Of(float beats) => new BeatDurationFloat(beats);
 
 		/// <summary>
+		/// Create an instance.
 		/// 新しいインスタンスを生成します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private BeatDurationFloat(double beats) => Beats = beats;
+		private BeatDurationFloat(float beats) => Beats = beats;
 
 		/// <summary>
+		/// A duration in a beat.
 		/// 拍数で表された時間です。
 		/// </summary>
-		public readonly double Beats;
+		public readonly float Beats;
 
 		public static implicit operator BeatDurationFloat(in BeatDuration duration)
-			=> BeatDurationFloat.Of(duration.Double);
+			=> BeatDurationFloat.Of(duration.BeatPart + duration.SubBeatPart.Float);
 
 #if UNITY_EDITOR
 		/// <summary>
@@ -78,19 +84,19 @@ namespace RyujuEngine.Units
 			=> new BeatDurationFloat(x.Beats - y.Beats);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat operator *(in BeatDurationFloat x, double y)
+		public static BeatDurationFloat operator *(in BeatDurationFloat x, float y)
 			=> new BeatDurationFloat(x.Beats * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat operator *(double y, in BeatDurationFloat x)
+		public static BeatDurationFloat operator *(float y, in BeatDurationFloat x)
 			=> new BeatDurationFloat(x.Beats * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatDurationFloat operator /(in BeatDurationFloat x, double y)
+		public static BeatDurationFloat operator /(in BeatDurationFloat x, float y)
 			=> new BeatDurationFloat(x.Beats / y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator %(in BeatDurationFloat x, in BeatDurationFloat y)
+		public static float operator %(in BeatDurationFloat x, in BeatDurationFloat y)
 			=> x.Beats % y.Beats;
 
 		#endregion
@@ -98,12 +104,14 @@ namespace RyujuEngine.Units
 		#region Equal and not equal.
 
 		/// <summary>
+		/// A hash value.
 		/// ハッシュ値を求めます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override int GetHashCode() => Beats.GetHashCode();
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -118,6 +126,7 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -132,18 +141,21 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(BeatDurationFloat x) => this == x;
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(in BeatDurationFloat x) => this == x;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,6 +165,7 @@ namespace RyujuEngine.Units
 			   1;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

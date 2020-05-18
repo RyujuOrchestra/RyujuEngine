@@ -25,6 +25,17 @@ namespace Collections.Extension
 		};
 
 		[Test]
+		public void It_Should_be_able_to_work_with_empty()
+		{
+			Assert.That(
+				new int[0].BinarySearchBounds(1, out var actualLower, out var actualUpper), Is.False,
+				"Invalid found flag."
+			);
+			Assert.That(actualLower, Is.EqualTo(0), "Invalid lower value.");
+			Assert.That(actualUpper, Is.EqualTo(0), "Invalid upper value.");
+		}
+
+		[Test]
 		[TestCase(0, false, 0, 0)]
 		[TestCase(1, true, 0, 1)]
 		[TestCase(2, false, 1, 1)]

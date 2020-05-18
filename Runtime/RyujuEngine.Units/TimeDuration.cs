@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 namespace RyujuEngine.Units
 {
 	/// <summary>
+	/// A struct that contains a duration between two time position.
 	/// 時間を秒数で表す構造体です。
 	/// </summary>
 	public readonly struct TimeDuration
@@ -13,78 +14,86 @@ namespace RyujuEngine.Units
 	, IEquatable<TimeDuration>
 	{
 		/// <summary>
+		/// An instance that indicates zero distance.
 		/// 0 秒を表すインスタンスです。
 		/// </summary>
-		public static readonly TimeDuration Zero = new TimeDuration(0.0);
+		public static readonly TimeDuration Zero = new TimeDuration(0.0f);
 
 		/// <summary>
+		/// An instance that indicates the positive infinite distance.
 		/// 正の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
-		public static readonly TimeDuration PositiveInfinity = new TimeDuration(double.PositiveInfinity);
+		public static readonly TimeDuration PositiveInfinity = new TimeDuration(float.PositiveInfinity);
 
 		/// <summary>
+		/// An instance that indicates the negative infinite distance.
 		/// 負の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
-		public static readonly TimeDuration NegativeInfinity = new TimeDuration(double.NegativeInfinity);
+		public static readonly TimeDuration NegativeInfinity = new TimeDuration(float.NegativeInfinity);
 
 		/// <summary>
+		/// An instance that indicates a second.
 		/// 1 秒を表すインスタンスです。
 		/// </summary>
-		public static readonly TimeDuration Second = new TimeDuration(1.0);
+		public static readonly TimeDuration Second = new TimeDuration(1.0f);
 
 		/// <summary>
+		/// An instance that indicates a minute.
 		/// 1 分を表すインスタンスです。
 		/// </summary>
-		public static readonly TimeDuration Minute = new TimeDuration(60.0);
+		public static readonly TimeDuration Minute = new TimeDuration(60.0f);
 
 		/// <summary>
+		/// An instance that indicates a millisecond.
 		/// 1 ミリ秒を表すインスタンスです。
 		/// </summary>
-		public static readonly TimeDuration MilliSecond = new TimeDuration(0.001);
+		public static readonly TimeDuration MilliSecond = new TimeDuration(0.001f);
 
 		/// <summary>
+		/// Create an instance with the specified seconds.
 		/// 指定した秒数のインスタンスを生成します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimeDuration OfSeconds(double seconds) => new TimeDuration(seconds);
+		public static TimeDuration OfSeconds(float seconds) => new TimeDuration(seconds);
 
-		/// <summary>
-		/// 新しいインスタンスを生成します。
-		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private TimeDuration(double seconds) => Seconds = seconds;
+		private TimeDuration(float seconds) => Seconds = seconds;
 
 		/// <summary>
+		/// The time duration in a second.
 		/// 秒数で表された時間です。
 		/// </summary>
-		public readonly double Seconds;
+		public readonly float Seconds;
 
 		/// <summary>
+		/// The time duration in a millisecond.
 		/// ミリ秒で表された時刻です。
 		/// </summary>
-		public double MilliSeconds => Seconds * 1000.0;
+		public float MilliSeconds => Seconds * 1000.0f;
 
 		/// <summary>
+		/// The time duration in a minute.
 		/// 分で表された時刻です。
 		/// </summary>
-		public double Minutes => Seconds / 60.0;
+		public float Minutes => Seconds / 60.0f;
 
 		/// <summary>
+		/// A millisecond part of the time duration.
 		/// この時間のミリ秒の部分のみを表す整数値です。
 		/// </summary>
-		public int MilliSecondPart => (int)(MilliSeconds % 1.0 * 1000.0);
+		public int MilliSecondPart => (int)(MilliSeconds % 1.0 * 1000.0f);
 
 		/// <summary>
+		/// A second part of the time duration.
 		/// この時間の秒の部分のみを表す整数値です。
 		/// </summary>
-		public int SecondPart => (int)(Seconds % 60.0);
+		public int SecondPart => (int)(Seconds % 60.0f);
 
 		/// <summary>
+		/// A minute part of the time duration.
 		/// この時間の分の部分のみを表す整数値です。
 		/// </summary>
-		public int MinutePart => (int)(Minutes % 60.0);
+		public int MinutePart => (int)Minutes;
 
 #if UNITY_EDITOR
 		/// <summary>
@@ -110,19 +119,23 @@ namespace RyujuEngine.Units
 			=> new TimeDuration(x.Seconds - y.Seconds);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimeDuration operator *(in TimeDuration x, double y)
+		public static TimeDuration operator *(in TimeDuration x, float y)
 			=> new TimeDuration(x.Seconds * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimeDuration operator *(double y, in TimeDuration x)
+		public static TimeDuration operator *(float y, in TimeDuration x)
 			=> new TimeDuration(x.Seconds * y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimeDuration operator /(in TimeDuration x, double y)
+		public static TimeDuration operator /(in TimeDuration x, float y)
 			=> new TimeDuration(x.Seconds / y);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static double operator %(in TimeDuration x, in TimeDuration y)
+		public static float operator /(in TimeDuration x, in TimeDuration y)
+			=> x.Seconds / y.Seconds;
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static float operator %(in TimeDuration x, in TimeDuration y)
 			=> x.Seconds % y.Seconds;
 
 		#endregion
@@ -130,12 +143,14 @@ namespace RyujuEngine.Units
 		#region Equal and not equal.
 
 		/// <summary>
+		/// A hash value.
 		/// ハッシュ値を求めます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override int GetHashCode() => Seconds.GetHashCode();
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -150,6 +165,7 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,18 +180,21 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(TimeDuration x) => this == x;
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(in TimeDuration x) => this == x;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -185,6 +204,7 @@ namespace RyujuEngine.Units
 			   1;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

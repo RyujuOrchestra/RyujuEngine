@@ -7,7 +7,8 @@ using RyujuEngine.Mathematics;
 namespace RyujuEngine.Units
 {
 	/// <summary>
-	/// あるタイミングの時刻を秒数で表す構造体です。
+	/// A struct that contains a time position.
+	/// あるタイミングの時刻を保持する構造体です。
 	/// </summary>
 	public readonly struct TimePoint
 	: IComparable
@@ -15,48 +16,72 @@ namespace RyujuEngine.Units
 	, IEquatable<TimePoint>
 	{
 		/// <summary>
+		/// A instance that indicates the origin.
 		/// 原点となる時刻です。
 		/// </summary>
 		public static readonly TimePoint Zero = new TimePoint(TimeDuration.Zero);
 
 		/// <summary>
+		/// An instance that indicates the position infinite position.
 		/// 正の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
 		public static readonly TimePoint PositiveInfinity = new TimePoint(TimeDuration.PositiveInfinity);
 
 		/// <summary>
+		/// An instance that indicates the negative infinite position.
 		/// 負の無限大を表すインスタンスです。
 		/// </summary>
-		/// <returns></returns>
 		public static readonly TimePoint NegativeInfinity = new TimePoint(TimeDuration.NegativeInfinity);
 
 		/// <summary>
+		/// Create an instance with the specified seconds.
 		/// 指定した秒数のインスタンスを生成します。
 		/// </summary>
+		/// <param name="seconds">
+		/// A time from the origin in a second.
+		/// 秒数で表された原点からの時間です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static TimePoint AtSeconds(double seconds) => new TimePoint(TimeDuration.OfSeconds(seconds));
+		public static TimePoint AtSeconds(float seconds) => new TimePoint(TimeDuration.OfSeconds(seconds));
 
 		/// <summary>
-		/// 原点からの秒数から TimePoint を生成します。
+		/// Create an instance with the specified duration from the origin.
+		/// 原点からの秒数からインスタンスを生成します。
 		/// </summary>
-		/// <param name="durationFromZero">原点からの秒数です。</param>
+		/// <param name="durationFromZero">
+		/// A time from the origin.
+		/// 原点からの時間です。
+		/// </param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public TimePoint(in TimeDuration durationFromZero)
+		public static TimePoint At(in TimeDuration durationFromZero) => new TimePoint(durationFromZero);
+
+		/// <summary>
+		/// Create an instance with the specified duration from the origin.
+		/// 原点からの秒数からインスタンスを生成します。
+		/// </summary>
+		/// <param name="durationFromZero">
+		/// A duration from zero.
+		/// 原点からの時間です。
+		/// </param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private TimePoint(in TimeDuration durationFromZero)
 			=> DurationFromZero = durationFromZero;
 
 		/// <summary>
+		/// A duration from the origin.
 		/// 原点からの経過時間です。
 		/// </summary>
 		public readonly TimeDuration DurationFromZero;
 
 		/// <summary>
+		/// A hash value.
 		/// ハッシュ値を求めます。
 		/// </summary>
 		public override int GetHashCode() => DurationFromZero.GetHashCode();
 
 #if UNITY_EDITOR
 		/// <summary>
+		/// A string for debugging.
 		/// デバッグ用の文字列表現を返します。
 		/// </summary>
 		public override string ToString() => DurationFromZero.ToString();
@@ -85,6 +110,7 @@ namespace RyujuEngine.Units
 		#region Equal and not equal.
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,6 +125,7 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -113,18 +140,21 @@ namespace RyujuEngine.Units
 		}
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(TimePoint x) => this == x;
 
 		/// <summary>
+		/// Detect the same values.
 		/// 同じ値かどうかを確かめます。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public bool Equals(in TimePoint x) => this == x;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -134,6 +164,7 @@ namespace RyujuEngine.Units
 			   1;
 
 		/// <summary>
+		/// Compare the values.
 		/// 値を比較します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
