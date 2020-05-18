@@ -76,6 +76,13 @@ namespace RyujuEngine.Collections.Extension
 		)
 		{
 			var length = list.Count;
+			if (length == 0)
+			{
+				lower = 0;
+				upper = 0;
+				return false;
+			}
+
 			if (comparer.Compare(element, list[0]) < 0)
 			{
 				lower = 0;
