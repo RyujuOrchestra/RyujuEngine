@@ -49,9 +49,10 @@ namespace RyujuEngine.Collections
 		/// </param>
 		public void Add(in BeatPoint time, T value)
 		{
-			if (_list[_list.Count -1].Time > time)
+			if (_list.Count <= 0 || _list[_list.Count -1].Time > time)
 			{
 				_list.Add(new Entry(time, value));
+				return;
 			}
 			_ = _list.ReplaceWithBinarySearch(new Entry(time, value), EntryTimeComparer.Default);
 		}
@@ -217,7 +218,7 @@ namespace RyujuEngine.Collections
 			/// An instance.
 			/// インスタンスです。
 			/// </summary>
-			public static EntryTimeComparer Default { get; } = new EntryTimeComparer();
+			public static readonly EntryTimeComparer Default = new EntryTimeComparer();
 
 			/// <inheritdoc/>
 			public int Compare(Entry left, Entry right) => left.Time.CompareTo(right.Time);
