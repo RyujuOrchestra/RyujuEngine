@@ -40,7 +40,7 @@ namespace RyujuEngine.Units
 		/// 指定した拍数のインスタンスを生成します。
 		/// </summary>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatPointFloat At(double beats) => new BeatPointFloat(BeatDurationFloat.Of(beats));
+		public static BeatPointFloat At(float beats) => new BeatPointFloat(BeatDurationFloat.Of(beats));
 
 		/// <summary>
 		/// Create an instance with the specified duration from the origin.
@@ -48,7 +48,7 @@ namespace RyujuEngine.Units
 		/// </summary>
 		/// <param name="durationFromZero">原点からの拍数です。</param>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static BeatPointFloat FromZeroTo(in BeatDurationFloat durationFromZero)
+		public static BeatPointFloat At(in BeatDurationFloat durationFromZero)
 			=> new BeatPointFloat(durationFromZero);
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +68,7 @@ namespace RyujuEngine.Units
 		public override int GetHashCode() => DurationFromZero.GetHashCode();
 
 		public static implicit operator BeatPointFloat(in BeatPoint time)
-			=> BeatPointFloat.At(time.DurationFromZero.Double);
+			=> BeatPointFloat.At(time.DurationFromZero.BeatPart + time.DurationFromZero.SubBeatPart.Float);
 
 #if UNITY_EDITOR
 		/// <summary>
