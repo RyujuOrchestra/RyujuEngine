@@ -26,6 +26,15 @@ namespace RyujuEngine.Mathematics
 		/// </summary>
 		public float Get(float offset = 0.0f)
 		{
+			if (float.IsPositiveInfinity(offset))
+			{
+				return float.PositiveInfinity;
+			}
+			if (float.IsNegativeInfinity(offset))
+			{
+				return float.NegativeInfinity;
+			}
+
 			var total = offset;
 			var totalErr = 0.0f;
 			var totalErr2 = 0.0f;

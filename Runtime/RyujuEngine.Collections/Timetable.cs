@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using RyujuEngine.Collections.Extension;
+using RyujuEngine.Mathematics;
 using RyujuEngine.Units;
 
 namespace RyujuEngine.Collections
@@ -53,7 +54,7 @@ namespace RyujuEngine.Collections
 		/// <returns>実時間です。</returns>
 		public TimePoint GetTimeAt(in BeatPoint beatTime)
 		{
-			var durations = new List<TimeDuration>();
+			var totalSeconds = new Accumulator();
 
 			var first = true;
 			BeatOrderedList<Value>.Entry current = default;
@@ -70,25 +71,159 @@ namespace RyujuEngine.Collections
 				{
 					break;
 				}
+				var sectionDuration = current.Value.Tempo.AbsDurationOfBeat
+					* ((BeatDurationFloat)(next.Time - current.Time)).Beats;
+				totalSeconds.Add(sectionDuration.Seconds);
 
-				durations.InsertWithBinarySearch(
-					current.Value.Tempo.AbsDurationOfBeat * (next.Time - current.Time).Double
-				);
-				durations.InsertWithBinarySearch(
-					next.Value.Tempo.AbsDurationOfBeat * next.Value.StopDuration.Double
-				);
+				var stopDuration = next.Value.Tempo.AbsDurationOfBeat
+					* ((BeatDurationFloat)next.Value.StopDuration).Beats;
+				totalSeconds.Add(stopDuration.Seconds);
 				current = next;
 			}
-			durations.InsertWithBinarySearch(
-				current.Value.Tempo.AbsDurationOfBeat * (beatTime - current.Time).Double
-			);
+			var tailDuration = current.Value.Tempo.AbsDurationOfBeat
+				* ((BeatDurationFloat)(beatTime - current.Time)).Beats;
+			totalSeconds.Add(tailDuration.Seconds);
 
-			var durationFromZero = TimeDuration.Zero;
-			foreach (var duration in durations)
+			return TimePoint.AtSeconds(totalSeconds.Get());
+		}
+
+		/// <summary>
+		/// Get a beat count at the specified time point.
+		/// 指定した時刻での拍数を取得します。
+		/// </summary>
+		/// <param name="time">
+		/// A time.
+		/// 時刻です。
+		/// </param>
+		public BeatPointFloat GetBeatTimeAt(in TimePoint time)
+		{
+			GetBeatsAt(time, out var beats, out _);
+			return beats;
+		}
+
+		/// <summary>
+		/// Get a sequence position at the specified time point.
+		/// 指定した時刻でのシーケンス位置を取得します。
+		/// </summary>
+		/// <param name="time">
+		/// A time.
+		/// 時刻です。
+		/// </param>
+		public BeatPointFloat GetSequencePositionAt(in TimePoint time)
+		{
+			GetBeatsAt(time, out _, out var position);
+			return position;
+		}
+
+		/// <summary>
+		/// Get a beat count and a sequence position at the specified time point.
+		/// 指定した時刻での拍数とシーケンス位置を取得します。
+		/// </summary>
+		/// <param name="time">
+		/// A time.
+		/// 時刻です。
+		/// </param>
+		/// <param name="beats">
+		/// A variable that will be contained a beat count at the specified time.
+		/// 指定した時刻での拍数を格納する変数です。
+		/// </param>
+		/// <param name="sequencePosition">
+		/// A variable that will be contained a beat count at the specified time.
+		/// 指定した時刻でのシーケンス位置を格納する変数です。
+		/// </param>
+		public void GetBeatsAt(in TimePoint time, out BeatPointFloat beats, out BeatPointFloat sequencePosition)
+		{
+			var totalTimeSeconds = new Accumulator();
+			var leadingBeatPoint = BeatPoint.Zero;
+			var leadingSequencePosition = BeatPoint.Zero;
+			var trailingBeatDuration = BeatDurationFloat.Zero;
+			var trailingSequenceMovement = BeatDurationFloat.Zero;
+
+			var first = true;
+			var reached = false;
+			BeatOrderedList<Value>.Entry current = default;
+			foreach (var next in this)
 			{
-				durationFromZero += duration;
+				if (first)
+				{
+					current = next;
+					first = false;
+					continue;
+				}
+
+				reached = ReachedAt(
+					time,
+					current.Value.Tempo,
+					current.Value.StopDuration,
+					next.Time - current.Time,
+					totalTimeSeconds,
+					ref leadingBeatPoint,
+					ref leadingSequencePosition,
+					out trailingBeatDuration,
+					out trailingSequenceMovement
+				);
+				if (reached)
+				{
+					break;
+				}
+				current = next;
 			}
-			return TimePoint.FromZeroTo(durationFromZero);
+
+			if (!reached)
+			{
+				_ = ReachedAt(
+					time,
+					current.Value.Tempo,
+					current.Value.StopDuration,
+					BeatDuration.Max,
+					totalTimeSeconds,
+					ref leadingBeatPoint,
+					ref leadingSequencePosition,
+					out trailingBeatDuration,
+					out trailingSequenceMovement
+				);
+			}
+
+			beats = (BeatPointFloat)leadingBeatPoint + trailingBeatDuration;
+			sequencePosition = (BeatPointFloat)leadingSequencePosition + trailingSequenceMovement;
+		}
+
+		private static bool ReachedAt(
+			TimePoint time,
+			in Tempo tempo,
+			in BeatDuration stopBeatDuration,
+			in BeatDuration sectionBeatDuration,
+			Accumulator prevTailTime,
+			ref BeatPoint prevTailBeats,
+			ref BeatPoint prevTailMovement,
+			out BeatDurationFloat trailingBeatDuration,
+			out BeatDurationFloat trailingSequenceMovement
+		)
+		{
+			var stopTimeDuration = tempo.AbsDurationOfBeat * ((BeatDurationFloat)stopBeatDuration).Beats;
+			prevTailTime.Add(stopTimeDuration.Seconds);
+			if (TimePoint.AtSeconds(prevTailTime.Get()) >= time)
+			{
+				trailingBeatDuration = BeatDurationFloat.Zero;
+				trailingSequenceMovement = BeatDurationFloat.Zero;
+				return true;
+			}
+
+			var sectionTimeDuration = tempo.AbsDurationOfBeat * ((BeatDurationFloat)sectionBeatDuration).Beats;
+			if (TimePoint.AtSeconds(prevTailTime.Get(sectionTimeDuration.Seconds)) >= time)
+			{
+				var trailingTimeDuration = time - TimePoint.AtSeconds(prevTailTime.Get());
+				trailingBeatDuration = BeatDurationFloat.Of(trailingTimeDuration / tempo.AbsDurationOfBeat);
+				trailingSequenceMovement = tempo.IsNegative ? -trailingBeatDuration : trailingBeatDuration;
+				return true;
+			}
+
+			prevTailTime.Add(sectionTimeDuration.Seconds);
+			prevTailBeats += sectionBeatDuration;
+			prevTailMovement += tempo.IsNegative ? -sectionBeatDuration : sectionBeatDuration;
+			trailingBeatDuration = BeatDurationFloat.Zero;
+			trailingSequenceMovement = BeatDurationFloat.Zero;
+			return false;
 		}
 
 		/// <summary>
