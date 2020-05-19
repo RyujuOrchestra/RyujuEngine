@@ -71,7 +71,7 @@ namespace RyujuEngine.Audio
 				}
 
 				var cpuElapsed = TimePoint.AtSeconds(UnityEngine.Time.realtimeSinceStartup) - _startCpuTime;
-				var dspElapsed = TimePoint.AtSeconds((float)AudioSettings.dspTime) - _startDspTime;
+				var dspElapsed = TimeDuration.OfSeconds((float)(AudioSettings.dspTime - _startDspSeconds));
 				var diff = cpuElapsed - dspElapsed;
 				var latency = AudioLatency.Duration;
 
@@ -188,9 +188,9 @@ namespace RyujuEngine.Audio
 			}
 			IsPlaying = false;
 
-			var nextDspTime = TimePoint.AtSeconds((float)AudioSettings.dspTime) + AudioLatency.Duration;
+			var nextDspSeconds = AudioSettings.dspTime + AudioLatency.Duration.Seconds;
 			_speaker.Stop();
-			var elapsed = nextDspTime - _startDspTime;
+			var elapsed = TimeDuration.OfSeconds((float)(nextDspSeconds - _startDspSeconds));
 			var isDelayPassed = elapsed >= _delay + _additionalDelay;
 			var isAdditionalDelayPassed = elapsed >= _additionalDelay;
 			_offset += isDelayPassed ? elapsed - _delay - _additionalDelay : TimeDuration.Zero;
@@ -220,7 +220,7 @@ namespace RyujuEngine.Audio
 		private void RecordStartTime()
 		{
 			_startCpuTime = TimePoint.AtSeconds(UnityEngine.Time.realtimeSinceStartup);
-			_startDspTime = TimePoint.AtSeconds((float)AudioSettings.dspTime) + AudioLatency.Duration;
+			_startDspSeconds = AudioSettings.dspTime + AudioLatency.Duration.Seconds;
 		}
 
 		/// <summary>
@@ -258,6 +258,6 @@ namespace RyujuEngine.Audio
 		private TimeDuration _additionalDelay = TimeDuration.Zero;
 		private TimePoint _offset = TimePoint.Zero;
 		private TimePoint _startCpuTime = TimePoint.Zero;
-		private TimePoint _startDspTime = TimePoint.Zero;
+		private double _startDspSeconds = 0.0f;
 	}
 }
