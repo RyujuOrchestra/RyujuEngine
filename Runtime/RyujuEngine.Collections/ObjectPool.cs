@@ -11,7 +11,11 @@ namespace RyujuEngine.Collections
 	/// A class that caches the specified type instances to reuse.
 	/// 再利用できるように指定した肩のインスタンスきキャッシュするクラスです。
 	/// </summary>
-	public sealed class ObjectPool<T> : IDisposable
+	public sealed class ObjectPool<T>
+	: IDisposable
+	, IObjectPreparable
+	, IObjectRentable<T>
+	, IObjectReturnable<T>
 	{
 		/// <summary>
 		/// Create an instance with the instance allocator.
@@ -46,20 +50,10 @@ namespace RyujuEngine.Collections
 			_pool.Clear();
 		}
 
-		/// <summary>
-		/// The number of created instances.
-		/// 生成済みのインスタンスの数です。
-		/// </summary>
+		/// <inheritdoc/>
 		public int Count => _pool.Count;
 
-		/// <summary>
-		/// Create the instances and prepare these for use.
-		/// インスタンスを生成し使えるように準備します。
-		/// </summary>
-		/// <param name="count">
-		/// The number of instances.
-		/// インスタンスの数です。
-		/// </param>
+		/// <inheritdoc/>
 		public void Prepare(int count)
 		{
 			for (int i = 0; i < count; i++)
@@ -68,22 +62,7 @@ namespace RyujuEngine.Collections
 			}
 		}
 
-		/// <summary>
-		/// Create the instances frame by frame and prepare these for use.
-		/// インスタンスをフレームごとに生成し使えるように準備します。
-		/// </summary>
-		/// <param name="count">
-		/// The number of instances.
-		/// インスタンスの数です。
-		/// </param>
-		/// <param name="maxCreationPerFrame">
-		/// The maximum count of creating instances per frame.
-		/// フレームごとのインスタンス生成の最大数です。
-		/// </param>
-		/// <returns>
-		/// A yield coroutine to wait for the instance creation.
-		/// インスタンス生成完了を待つための yield コルーチンです。
-		/// </returns>
+		/// <inheritdoc/>
 		public AsyncActionOperation PrepareAsync(int count, int maxCreationPerFrame)
 		{
 			var operation = new AsyncActionOperation();
@@ -126,10 +105,7 @@ namespace RyujuEngine.Collections
 			operation.MarkAsCompleted();
 		}
 
-		/// <summary>
-		/// Borrow an instance.
-		/// インスタンスを借ります。
-		/// </summary>
+		/// <inheritdoc/>
 		public T Rent()
 		{
 			if (!TryRent(out var instance))
@@ -140,11 +116,22 @@ namespace RyujuEngine.Collections
 			return instance;
 		}
 
+		/// <inheritdoc/>
+		public void Return(T instance)
+		{
+			_allocator.Deactivate(instance);
+			_pool.Enqueue(instance);
+		}
+
 		/// <summary>
 		/// Try to borrow an instance.
 		/// インスタンスを借りることを施行します。
 		/// </summary>
 		/// <returns>
+		/// <see cref="true"/> if succeeded to borrow.
+		/// <see cref="false"/> otherwise.
+		/// 借りることができたときは <see cref="true"/> です。
+		/// そうでなければ <see cref="false"/> です。
 		/// </returns>
 		public bool TryRent(out T instance)
 		{
@@ -159,16 +146,6 @@ namespace RyujuEngine.Collections
 				instance = default;
 			}
 			return exists;
-		}
-
-		/// <summary>
-		/// Return the instance.
-		/// インスタンスを返却します。
-		/// </summary>
-		public void Return(T instance)
-		{
-			_allocator.Deactivate(instance);
-			_pool.Enqueue(instance);
 		}
 
 		private readonly IObjectAllocator<T> _allocator;
